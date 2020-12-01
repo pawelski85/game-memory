@@ -15,6 +15,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
@@ -78,6 +79,7 @@ public class Memory extends Application {
 
     static int counter = 0;
     static int counter2 = 0;
+    static int counter3=0;
     static int lastClickNumber;
     static List<Button> buttonList = new ArrayList<>();
     int imageId;
@@ -93,11 +95,14 @@ public class Memory extends Application {
         flow.setVgap(8);
         flow.setHgap(4);
         Stage window;
-        Scene scene1, scene2, scene3;
-        Button button1 = new Button("HARD");
-        Button button2 = new Button("PLAY AGAIN");
+        Scene scene1, scene2;
+
+        Button button1 = new Button("EASY");
+        Button button2 = new Button("CHANGE LEVEL");
+        Button button3 = new Button();
 
         Label label1 = new Label("Level");
+
         VBox layout1 = new VBox(20);
         VBox layout2 = new VBox(20);
 
@@ -144,7 +149,6 @@ public class Memory extends Application {
             //logika gry
             button.setOnAction(event -> {
                 counter++;
-
                 Button clickedButton = (Button) event.getSource();
                 Image image = new Image(getClass().getResourceAsStream("/" + clickedButton.getId() + ".jpg"));
                 clickedButton.setGraphic(new ImageView(image));
@@ -153,6 +157,7 @@ public class Memory extends Application {
                     //buttonList bierzemy 0       bierzemy 1     jesli rowne drugie klikniecie.getID 1
                     if (lastClickNumber == buttonList.indexOf(clickedButton)) {
                         System.out.println("dont cheat");
+                        counter=1;
                     } else {
                         if (buttonList.get(lastClickNumber).getId().equals(clickedButton.getId())) {
                             //System.out.println(clickedButton.getId());
@@ -160,15 +165,15 @@ public class Memory extends Application {
                             buttonList.get(lastClickNumber).setDisable(true);
                             usedButtons.add(lastClickNumber);
                             usedButtons.add(buttonList.indexOf(clickedButton));
-                            //counter2++;
+                            counter2++;
                             // System.out.println(counter2);
 //                            if (counter2 == 4) {
 //                                System.out.println("you win");
 //                                System.out.println(buttonList.size());
 //                                buttonList = new ArrayList<>();
 //                            }
-                            System.out.println("usedButtons i zgadłem"+usedButtons.size());
-                            if(usedButtons.size()<7){
+
+                            if(usedButtons.size()< buttonList.size()){
                             Random generator = new Random();
                                 //System.out.println("tutaj");
                             do {
@@ -190,6 +195,7 @@ public class Memory extends Application {
                                     if (newClickedButton.getId().equals(newClickedButton2.getId())) {
                                         usedButtons.add(x);
                                         usedButtons.add(y);
+                                        counter3++;
                                         //System.out.println(clickedButton.getId());
                                         newClickedButton.setDisable(true);
                                         newClickedButton2.setDisable(true);
@@ -214,12 +220,28 @@ public class Memory extends Application {
                             counter = 1;
                         }
                     }
+                    if(counter2+counter3==4) {
+                        if(counter2>counter3) {
+                            //You win
+                            button3.setText("YOU WIN PLAY AGAIN");
+                        }
+                        else{
+                            //Draw
+                            button3.setText("DRAW PLAIN AGAIN");
+                        }
+                        layout2.getChildren().addAll(button3);
+                    }
+
                 }
 
                 lastClickNumber = buttonList.indexOf(clickedButton);
                 //System.out.println(lastClickNumber);
+               // if(counter2+counter3==buttonList.size()/2){
+                //}
+
 
             });
+
         }
     }
 
